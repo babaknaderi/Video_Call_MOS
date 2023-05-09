@@ -10,7 +10,7 @@ from torch import optim
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 
-from vcm.model import VcmNet, get_features
+from vcm.model import MlvqNet, get_features
 
 # evaluation function
 def eval_model(model, dl_val, dev):
@@ -28,14 +28,14 @@ class VideoDataset(Dataset):
     def __init__(self, csv_file, data_dir, features, db_type):
         self.features = features
         df = pd.read_csv(csv_file)
-        self.df = df[df['type']==db_type]
+        self.df = df[df['set_0']==db_type]
         self.data_dir = data_dir
     def __len__(self):
         return len(self.df)
     def __getitem__(self, idx):
-        df_features = pd.read_csv(os.path.join(self.data_dir, self.df['vmaf_results'].iloc[idx]))
+        df_features = pd.read_csv(os.path.join(self.data_dir, self.df['obj_metric_details'].iloc[idx]))
         x = get_features(df_features, self.features)[0]
-        y = self.df['MOS'].iloc[idx]
+        y = self.df['cmos'].iloc[idx]
         x = torch.as_tensor(x, dtype=torch.float)
         y = torch.as_tensor(y, dtype=torch.float).view(-1)        
         return x, y
@@ -44,7 +44,7 @@ class VideoDataset(Dataset):
 def train(csv_file, data_dir, output_dir, epochs, features, hidden_size, num_layers, bs, lr, lr_patience):
 
     # model
-    model = VcmNet(hidden_size=hidden_size, num_layers=num_layers, features=features)
+    model = MlvqNet(hidden_size=hidden_size, num_layers=num_layers, features=features)
 
     ds_train = VideoDataset(csv_file, data_dir, features, db_type='train')
     ds_val = VideoDataset(csv_file, data_dir, features, db_type='val')

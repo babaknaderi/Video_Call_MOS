@@ -1,13 +1,14 @@
 from vcm.training import train
 
 # input / output data
-csv_file = '/root/data/video_call_mos_set/video_call_mos_set.csv'
-data_dir = '/root/data/video_call_mos_set/data'
-output_dir = '/root/data/video_call_mos_set/output'
+csv_file = 'C:/mlvq_fhl/cmos_fullset.csv'
+data_dir = 'C:/mlvq_fhlclip_with_cmos'
+output_dir = 'C:/mlvq_fhl/output'
 
 # training settings
-epochs = 1000
-features = ['frame_skips', 'frame_freeze', 'integer_motion', 'integer_adm2', 'integer_adm_scale0', 'integer_adm_scale1', 'integer_adm_scale2', 
+#epochs = 1000
+epochs = 5
+features = ['integer_motion','integer_motion2', 'integer_adm2', 'integer_adm_scale0', 'integer_adm_scale1', 'integer_adm_scale2', 
             'integer_adm_scale3', 'integer_vif_scale0', 'integer_vif_scale1', 'integer_vif_scale2', 'integer_vif_scale3']
 hidden_size = 256
 num_layers = 6
